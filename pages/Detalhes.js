@@ -1,50 +1,42 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React from "react";
+import { View, Text, StyleSheet, Button } from "react-native";
 
-export default function Detalhes() {
-    const [texto, setTexto] = useState("Texto sem persistência");
-    const [persistedTexto, setPersistedTexto] = useState("Texto com persistência");
+const Detalhes = ({ route, navigation }) => {
+    const { inputText = 'Nenhum texto salvo', savedText = 'Nenhum texto salvo'} = route.params;
 
     return (
         <View style={styles.container}>
             <Text style={styles.titulo}>Detalhes</Text>
-
-            <Text style={styles.textoLaranja}>
-                Sem persistência: {texto || "Nenhum texto salvo"}
-            </Text>
-
-            <Text style={styles.textoRoxo}>
-                Persistência: {persistedTexto || "Nenhum texto salvo"}
-            </Text>
+            <Text style={styles.red_text}>Sem Persistência: {inputText}</Text>
+            <Text style={styles.green_text}> Persistência: {savedText}</Text>
+            <View style={styles.buttonConatainer}>
+            <Button title="Voltar" onPress={() => navigation.goBack()} />
+            </View>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: 100,
-        paddingHorizontal: 25,
-        gap: 20,
-        backgroundColor: "#EFEBE0",
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
     },
-    titulo: {
-        fontSize: 32,
-        textAlign: "center",
-        fontWeight: "bold",
-        textDecorationLine: "underline",
-        color: "#100B60",
-    },
-    textoLaranja: {
+    title: {
         fontSize: 20,
-        textAlign: "center",
-        color: "#C33E60",
-        marginTop: 15,
+        fontWeight: '600',
+        textAlign: 'center',
+        margin: 10,
     },
-    textoRoxo: {
-        fontSize: 20,
-        textAlign: "center",
-        color: "#206220",
-        marginTop: 15,
+    red_text: {
+        color: 'red',
+        marginBottom: 10,
+    },
+    green_text: {
+        color: 'green',
+        marginBottom: 10,
     },
 });
+
+export default Detalhes;
