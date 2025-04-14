@@ -10,7 +10,7 @@ const Detalhes = ({ route, navigation }) => {
             <Text style={styles.red_text}>Sem Persistência: {inputText}</Text>
             <Text style={styles.green_text}> Persistência: {savedText}</Text>
             <View style={styles.buttonConatainer}>
-            <Button title="Voltar" onPress={() => navigation.goBack()} />
+            <Button title="Voltar" onPress={() => navigation.goBack()} color="blue" />
             </View>
         </View>
     );
