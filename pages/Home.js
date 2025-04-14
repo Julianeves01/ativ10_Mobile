@@ -1,32 +1,55 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { green } from "react-native-reanimated/lib/typescript/Colors";
 
-export default function Home() {
-    const [texto, setTexto] = useState("");
+export default function Home({ navigation }) {
+    const [inputText, setInputText] = useState("");
+    const [savedText, setSavedText] = useState("Nenhum texto salvo!");
+
+    useEffect(() => {
+        const loadPersistedText = async () => {
+            const savedText = await AsyncStorage.getItem("savedText");
+            if (savedText) {
+                setInputText(savedText);
+                setSavedText(savedText);
+            }
+        };
+        loadPersistedText();
+    }, []);
+
+    const saveText = async () => {
+        await AsyncStorage.setItem("savedText", inputText);
+        setSavedText(inputText);
+    };
+
+    const clearText = async () => {
+        await AsyncStorage.removeItem("savedText");
+        setSavedText("Nenhum texto salvo!");
+        setInputText("");
+    };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.titulo}>Persistência e Navegação</Text>
+            <Text style={styles.title}> Persistência e Navegação</Text>
+            <TextInput style={styles.input} placeholder="Digite algo" value= {inputText} onChangeText={setInputText}/>
 
-            <Text style={styles.textoLaranja}>Sem persistência: Nenhum texto salvo</Text>
-            <Text style={styles.textoRoxo}>Persistência: Nenhum texto salvo</Text>
+            <Text style={styles.red_text}>Sem Persistência: {inputText || 'Nenhum texto salvo'}</Text>
+            <Text style={styles.green_text}>Texto Persistido: {savedText}</Text>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Digite algo"
-                value={texto}
-                onChangeText={setTexto}
-            />
+            <View style={styles.buttonContainer}>
+                <Button title="Salvar" onPress={saveText} color="blue" />
+            </View>
 
-            <TouchableOpacity style={styles.botao1} onPress={() => alert("Texto salvo!")}>
-                <Text style={styles.textoBotao}>Salvar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.botao2} onPress={() => setTexto("")}>
-                <Text style={styles.textoBotao}>Limpar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.botao3} onPress={() => alert("Ainda sem navegação!")}>
-                <Text style={styles.textoBotao}>Detalhes</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonContainer}>
+                <Button title="Limpar" onPress={clearText} color="blue" />
+            </View>
+
+            <View style={styles.buttonContainer}>
+                <Button title="Detalhes" onPress={() => navigation.navigate('Detalhes', { inputText, savedText})} color="blue" />
+            </View>
+
+            <Text style={styles.linkPefil} onPress={() => navigation.navigate('Perfil')}>Acesse meu Perfil!</Text>
         </View>
     );
 }
@@ -34,60 +57,40 @@ export default function Home() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: 100,
-        paddingHorizontal: 25,
-        gap: 20,
-        backgroundColor: "rgb(255, 255, 255)",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: '#F5FCFF',
     },
-    titulo: {
-        fontSize: 32,
-        textAlign: "center",
-        fontWeight: "bold",
-        color: "rgb(33, 48, 139)",
-    },
-    textoLaranja: {
+    title: {
         fontSize: 20,
-        textAlign: "center",
-        color: "rgb(231, 56, 56)",
-    },
-    textoRoxo: {
-        fontSize: 20,
-        textAlign: "center",
-        color: "rgb(69, 94, 234)",
+        fontWeight: '600',
+        textAlign: 'center',
+        margin: 10,
     },
     input: {
+        borderColor: 'gray',
         borderWidth: 1,
-        borderColor: "#6F2739",
-        borderRadius: 8,
-        padding: 10,
-        fontSize: 18,
-        marginBottom: 20,
-        width: '100%',
+        width: '80%',
+        marginBottom: 10,
+        backgroundColor: 'white'
     },
-    botao1: {
-        backgroundColor: "rgb(69, 94, 234)",
-        padding: 10,
-        borderRadius: 8,
-        alignItems: "center",
-        marginVertical: 4,
+    red_Text: {
+        color: 'red',
+        marginBottom: 10,
     },
-    botao2: {
-        backgroundColor: "rgb(231, 56, 56)",
-        padding: 10,
-        borderRadius: 8,
-        alignItems: "center",
-        marginVertical: 4,
+    green_Text: {
+        color: 'green',
+        marginBottom: 10,
     },
-    botao3: {
-        backgroundColor: "#rgba(104, 84, 84, 0.5)",
-        padding: 10,
-        borderRadius: 8,
-        alignItems: "center",
-        marginVertical: 4,
+    buttonContainer: {
+        marginBottom: 10,
+        width: '80%',
     },
-    textoBotao: {
-        color: "white",
-        fontSize: 20,
-        fontWeight: "bold",
-    },
+    linkPefil: {
+        color: 'darkblue',
+        fontSize: 12,
+        textAlign: 'center',
+        marginTop: 20,
+        textDecorationLine: 'underline',
+    }
 });
