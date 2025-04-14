@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
-import { green } from "react-native-reanimated/lib/typescript/Colors";
 
 export default function Home({ navigation }) {
     const [inputText, setInputText] = useState("");
@@ -32,10 +31,15 @@ export default function Home({ navigation }) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}> Persistência e Navegação</Text>
-            <TextInput style={styles.input} placeholder="Digite algo" value= {inputText} onChangeText={setInputText}/>
+            <TextInput
+                style={styles.input}
+                placeholder="Digite algo"
+                value={inputText}
+                onChangeText={setInputText}
+            />
 
-            <Text style={styles.red_text}>Sem Persistência: {inputText || 'Nenhum texto salvo'}</Text>
-            <Text style={styles.green_text}>Texto Persistido: {savedText}</Text>
+            <Text style={styles.redText}>Sem Persistência: {inputText || "Nenhum texto salvo"}</Text>
+            <Text style={styles.greenText}>Texto Persistido: {savedText}</Text>
 
             <View style={styles.buttonContainer}>
                 <Button title="Salvar" onPress={saveText} color="blue" />
@@ -46,10 +50,16 @@ export default function Home({ navigation }) {
             </View>
 
             <View style={styles.buttonContainer}>
-                <Button title="Detalhes" onPress={() => navigation.navigate('Detalhes', { inputText, savedText})} color="blue" />
+                <Button
+                    title="Detalhes"
+                    onPress={() => navigation.navigate("Detalhes", { inputText, savedText })}
+                    color="blue"
+                />
             </View>
 
-            <Text style={styles.linkPefil} onPress={() => navigation.navigate('Perfil')}>Acesse meu Perfil!</Text>
+            <Text style={styles.linkPerfil} onPress={() => navigation.navigate("Perfil")}>
+                Acesse meu Perfil!
+            </Text>
         </View>
     );
 }
@@ -59,38 +69,38 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: '#F5FCFF',
+        backgroundColor: "#F5FCFF",
     },
     title: {
         fontSize: 20,
-        fontWeight: '600',
-        textAlign: 'center',
+        fontWeight: "600",
+        textAlign: "center",
         margin: 10,
     },
     input: {
-        borderColor: 'gray',
+        borderColor: "gray",
         borderWidth: 1,
-        width: '80%',
+        width: "80%",
         marginBottom: 10,
-        backgroundColor: 'white'
+        backgroundColor: "white",
     },
-    red_Text: {
-        color: 'red',
+    redText: {
+        color: "red",
         marginBottom: 10,
     },
-    green_Text: {
-        color: 'green',
+    greenText: {
+        color: "green",
         marginBottom: 10,
     },
     buttonContainer: {
         marginBottom: 10,
-        width: '80%',
+        width: "80%",
     },
-    linkPefil: {
-        color: 'darkblue',
+    linkPerfil: {
+        color: "darkblue",
         fontSize: 12,
-        textAlign: 'center',
+        textAlign: "center",
         marginTop: 20,
-        textDecorationLine: 'underline',
-    }
+        textDecorationLine: "underline",
+    },
 });
